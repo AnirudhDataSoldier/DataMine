@@ -1,0 +1,77 @@
+#Webscrapper using BueatifulSoup library for HTMl data scrapping.
+#Using my college College website to webscrap the professors data which is available on website.
+#For more information go through the BeautifulSoup documentation.
+
+#First step is to import the libraries!
+
+#For Data handling purpose.
+import pandas as pd 
+
+#As BeutifulSoup cannot request the HTTPs, we have to use requests library for this purpose.
+import requests as re
+
+#For HTML we scrapping we use BeatifulSoup library
+from bs4 import BeautifulSoup
+
+#We now have to store the link from which we have to web scrap in a variable.
+url = 'https://gim.ac.in/areawisefaculty.php'
+
+#Requesting the source code
+request = requests.get(url)
+
+#Extract the data through the source code stored in variable request.
+soup = BeautifulSoup(request.content, 'html.parser')
+#Here html.parser is used. You can also use parsors such as lxml for this purpose.
+
+#We have to extract the links for individual proffessor profile to extract their data.
+#P.S. For better understanding of code further go through basic html syntax's.
+Links = soup.find_all('div',{'class':'faculty-list-rgt'})
+
+#Creating a loop to extract all the links
+Links_All = []
+
+for i in Links:
+    link = i.find_all('a')[0]
+    link = link.get('href')
+    Links_All.append(link)
+    
+#Visualise the links
+print(Links_All)
+
+#Creating a loop to web scrap required columns from individual pages.
+Name_of_Professor = []
+Designition_of_Professor = []
+profile_of_professor = []
+Telephone_Number = []
+profile_of_professor = []
+Email_of_professor = []
+
+for i in Links_All:
+    req = requests.get(i)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    Name = soup.find_all('h1', text=True)[0].text
+    Name_of_Professor.append(Name)
+    Designition = soup.find_all('div', {'class': 'faculty-details-rgt'}, text=True)[0].text
+    Designition_of_Professor.append(Designition)
+    Email = soup.find_all('div', {'class': 'faculty-details-rgt'}, text=True)[1].text
+    Email_of_professor.append(Email)
+    profile = soup.find_all('p', text=True)[0].text
+    profile_of_professor.append(profile)
+  
+#Making  a data frame out of this column!
+Data = pd.DataFrame()
+Data['Name_of_Professor'] = Name_of_Professor
+Data['Designition_of_Professor'] = Designition_of_Professor
+#Data['Telephone_Number'] = Telephone_Number
+#Data['Email'] = Email_of_professor
+Data['profile_of_professor'] = profile_of_professor
+
+
+#Visualizing the results and saving the data.
+
+print(Data)
+
+Data.to_csv('C:/Users/akn19/Desktop/BeautifulSoup/Data.csv')
+
+#Thank you!!!
+  
