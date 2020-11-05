@@ -1,0 +1,23 @@
+#Optical charecter recognition using Pytessaract
+
+#For Insatllation and documentation follow this link (https://medium.com/analytics-vidhya/performing-optical-character-recognition-with-python-and-pytesseract-using-anaconda-4bfe1ee6a75f)
+
+#Install and import the library
+import pytesseract as tess
+
+#Giving the location of OCR exe file
+tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+#Importing PIL library to read image in Python
+from PIL import Image
+
+#Giving the location of the image. Multiple images can aslo be used and a loop can be made to run them all at once.
+image = Image.open("C:/Users/akn19/Desktop/SOP/SOP2 Images/18.png")
+
+#Storing the scanned data into a variable
+pic = tess.image_to_string(image)
+
+Visualizing the data
+print(pic)
+
+Thank you!!!
